@@ -1,0 +1,16 @@
+name: SFDX-CLI Deploy develop branch to Salesforce
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  SFDX-CLI-Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🐧 GitHub Action running on ${{ runner.os }}"
+      - run: echo "🔎 Retrieving ${{ github.ref }} from ${{ github.repository }}."
+      - uses: actions/checkout@v2
+      - run: npm install sfdx-cli -g
+      - run: echo "${{ secrets.DEVELOP_SALESFORCE_JWT_SECRET_KEY }}" > server.key
+      - run: sfdx force:auth:jwt:grant --clientid=${{ secrets.DEVELOP_SALESFORCE_CONSUMER_KEY }} --jwtkeyfile=server.key --username=${{ secrets.DEVELOP_SALESFORCE_DEVHUB_USERNAME }} --setdefaultdevhubusername
+      - run: sfdx force:source:deploy --manifest=manifest/package.xml --testlevel=RunLocalTests -u ${{ secrets.DEVELOP_SALESFORCE_DEVHUB_USERNAME }}

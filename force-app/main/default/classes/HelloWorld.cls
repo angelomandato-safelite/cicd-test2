@@ -4,6 +4,6 @@ public with sharing class HelloWorld {
     }
 
     public static void sayhello() {
-        System.debug('Hello WONDERFUL WORLD!');
+        System.debug('HELLO WONDERFUL WORLD, I LIKE PIZZA!');
     }
 }
