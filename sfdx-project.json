@@ -6,7 +6,7 @@
     }
   ],
   "name": "test-app2",
-  "namespace": "",
+  "namespace": "Hello",
   "sfdcLoginUrl": "https://login.salesforce.com",
   "sourceApiVersion": "63.0"
 }
