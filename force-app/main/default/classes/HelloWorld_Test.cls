@@ -4,6 +4,7 @@ private class HelloWorld_Test {
     private static void test() {
         HelloWorld obj = new HelloWorld();
         System.assert(obj != null, 'Failed to instantiate HelloWorld');
+        obj.sayHello();
     }
 }
 
