@@ -1,0 +1,49 @@
+name: SFDX-CLI Deploy develop branch to Salesforce
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'force-app/**'
+jobs:
+  SFDX-CLI-Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the Source code and install
+      - run: echo "🐧 GitHub Action running on ${{ runner.os }}"
+      - run: echo "🔎 Retrieving ${{ github.ref }} from ${{ github.repository }}."
+      - uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
+      - name: Verify branch
+        run: git branch
+      - name: Installing NPM
+        run: npm install
+      
+      # Install @salesforce/cli (sfdx-cli is deprecated)
+      - name: Installing SF CLI
+        run: |
+          npm install @salesforce/cli -g
+      
+      # # API Secret Key
+      # - name: Creating .key file
+      #   run: |
+      #     touch server.key
+      #     echo -e "${{ secrets.DEVELOP_SALESFORCE_JWT_SECRET_KEY }}" >> server.key
+      
+      # # Authorizing
+      # - name: Authorizing the DevHub
+      #   run: sf org login jwt --json --alias DevHub --set-default --set-default-dev-hub --username "${{ secrets.DEVELOP_SALESFORCE_DEVHUB_USERNAME }}" --keyfile server.key --clientid ${{ secrets.DEVELOP_SALESFORCE_CONSUMER_KEY }}
+
+      # Authorizing via SFDX_AUTH_URL
+      - name: Authorizing with SFDX_AUTH_URL
+        run: | 
+          echo ${{ secrets.DEVELOP_SFDX_AUTH_URL }} | sf org login sfdx-url -s -u
+
+      # Deploying
+      - name: Deploy app
+        run: sf project deploy start -d force-app/ -l RunLocalTests -w 30
+        #run: sf project deploy start -d force-app/ -l NoTestRun -w 30
+        #run: sf project deploy start -d force-app/ --manifest manifest/package.xml -l RunLocalTests -w 30
+
