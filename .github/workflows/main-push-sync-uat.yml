@@ -25,5 +25,5 @@ jobs:
         uses: connor-baer/action-sync-branch@v1.1.0
         with:
           branch: uat
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.SALESFORCE_MAIN_SYNC_TO_UAT }}
           force: false
