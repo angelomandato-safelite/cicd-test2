@@ -1,0 +1,29 @@
+# main-push-sync-uat.yml
+#
+# Syncronize uat branch with main branch
+# ref: https://github.com/connor-baer/action-sync-branch
+#
+# token required: 
+name: Sync uat with main
+
+on:
+  push:
+      branches:
+        - main
+  
+jobs:
+  sync-branch:
+    name: Update uat branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sync Branch
+        uses: connor-baer/action-sync-branch@v1.1.0
+        with:
+          branch: uat
+          token: ${{ secrets.GITHUB_TOKEN }}
+          force: false
